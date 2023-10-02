@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_app/screens/settings/settings.dart';
+import 'package:to_do_app/screens/tasks/add_tasks_bottom_sheet.dart';
 import 'package:to_do_app/screens/tasks/tasks_tab.dart';
 import 'package:to_do_app/shared/styles/app_colors.dart';
 
@@ -18,17 +19,27 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         title: Text("ToDo"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child: Icon(Icons.add),),
+        onPressed: (){
+          showAddTasksBottomSheet();
+        },
+        shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(
+            color: AppColors.white,
+            width: 3
+          )
+        ),
+        child: Icon(Icons.add,size: 30,),),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         notchMargin: 12,
-        color: AppColors.backgroundColor,
+        color: AppColors.white,
         shape: CircularNotchedRectangle(),
         clipBehavior: Clip.hardEdge,
         child: BottomNavigationBar(
@@ -47,6 +58,16 @@ class _HomeLayoutState extends State<HomeLayout> {
       ),
       body: tabs[index],
     );
+  }
+
+  void showAddTasksBottomSheet() {
+    showModalBottomSheet(context: context,
+        isScrollControlled: true,
+        builder: (context){
+      return Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: AddTaskBottomSheet());
+    });
   }
 }
 
