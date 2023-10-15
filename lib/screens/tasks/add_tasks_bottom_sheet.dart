@@ -1,46 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:to_do_app/layout/home_layout.dart';
+import 'package:to_do_app/models/tasks_model.dart';
+import 'package:to_do_app/shared/network/firebase/firebase_manager.dart';
+import 'package:to_do_app/shared/styles/app_colors.dart';
 
-import '../../models/tasks_model.dart';
-import '../../shared/network/firebase/firebase_manager.dart';
-import '../../shared/styles/app_colors.dart';
-
-class EditTask extends StatefulWidget {
-  static String routeName = "Edit Screen";
-  DateTime chosenDate = DateTime.now();
-
+class AddTaskBottomSheet extends StatefulWidget {
   @override
-  State<EditTask> createState() => _EditTaskState();
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }
 
-class _EditTaskState extends State<EditTask> {
-  var titleEditController = TextEditingController();
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
+  var titleController = TextEditingController();
 
-  var descriptionEditController = TextEditingController();
+  var descriptionController = TextEditingController();
 
-  var chosenDateEdit = DateTime.now();
-
-  late TasksModel task;
+  var chosenDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    task = ModalRoute.of(context)?.settings.arguments as TasksModel;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Task"),
-      ),
-      body: Column(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("Edit Task",
-              style: TextStyle(
-                  fontFamily: GoogleFonts.poppins().fontFamily,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryColor)),
-          TextField(
-            controller: titleEditController,
+          Text(
+            "Add New Task",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: AppColors.black, fontSize: 22),
+          ),
+          SizedBox(
+            height: 24,
+          ),
+          TextFormField(
+            controller: titleController,
             decoration: InputDecoration(
                 label: Text("Task Title",
                     style: TextStyle(
@@ -58,8 +54,8 @@ class _EditTaskState extends State<EditTask> {
           SizedBox(
             height: 18,
           ),
-          TextField(
-            controller: descriptionEditController,
+          TextFormField(
+            controller: descriptionController,
             decoration: InputDecoration(
                 label: Text("Task Description",
                     style: TextStyle(
@@ -77,39 +73,44 @@ class _EditTaskState extends State<EditTask> {
           SizedBox(
             height: 20,
           ),
+          Text("Select Date",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: AppColors.black, fontSize: 20)),
+          SizedBox(
+            height: 8,
+          ),
           InkWell(
             onTap: () {
               selectDate();
             },
-            child: Text(chosenDateEdit.toString().substring(0, 10),
+            child: Text(chosenDate.toString().substring(0, 10),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!
                     .copyWith(color: AppColors.black)),
           ),
+          SizedBox(
+            height: 20,
+          ),
           ElevatedButton(
               onPressed: () {
-                task = TasksModel(
-                    id: task.id,
+                TasksModel task = TasksModel(
                     userId: FirebaseAuth.instance.currentUser!.uid,
-                    title: titleEditController.text,
-                    description: descriptionEditController.text,
-                    date: DateUtils.dateOnly(chosenDateEdit)
-                        .millisecondsSinceEpoch);
-                /*task.title = titleEditController.text;
-            task.description = descriptionEditController.text;
-            task.date = DateUtils.dateOnly(chosenDateEdit).millisecondsSinceEpoch;*/
-                FirebaseManager.editTask(task).then((_) {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomeLayout()));
-                  setState(() {});
+                    title: titleController.text,
+                    description: descriptionController.text,
+                    date:
+                        DateUtils.dateOnly(chosenDate).millisecondsSinceEpoch);
+                FirebaseManager.addTask(task).then((value) {
+                  Navigator.pop(context);
                 });
               },
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12))),
-              child: Text("Save Changes")),
+              child: Text("Add Task")),
         ],
       ),
     );
@@ -118,14 +119,14 @@ class _EditTaskState extends State<EditTask> {
   void selectDate() async {
     DateTime? selectedDate = await showDatePicker(
         context: context,
-        initialDate: chosenDateEdit,
+        initialDate: chosenDate,
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(Duration(days: 365)));
     if (selectedDate == null) {
       //it will be null when pressed on cancel
       return;
     }
-    chosenDateEdit = selectedDate;
+    chosenDate = selectedDate;
     setState(() {});
   }
 }

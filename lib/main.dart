@@ -1,16 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_app/layout/home_layout.dart';
+import 'package:to_do_app/providers/my_provider.dart';
+import 'package:to_do_app/screens/edit_tasks/edit_tasks.dart';
+import 'package:to_do_app/screens/register/register_screen.dart';
 import 'package:to_do_app/shared/styles/app_theme.dart';
 
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  //FirebaseFirestore.instance.disableNetwork();
+  runApp(ChangeNotifierProvider(
+      create: (context) => MyProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,12 +24,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeLayout.routeName,
+      initialRoute: provider.userFirebase != null
+          ? HomeLayout.routeName
+          : RegisterScreen.routeName,
       routes: {
         HomeLayout.routeName: (_) => HomeLayout(),
-
+        EditTask.routeName: (_) => EditTask(),
+        RegisterScreen.routeName: (_) => RegisterScreen(),
       },
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
