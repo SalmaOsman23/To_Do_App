@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_app/layout/home_layout.dart';
+import 'package:to_do_app/providers/my_provider.dart';
 import 'package:to_do_app/shared/network/firebase/firebase_manager.dart';
 
 class LoginScreen extends StatelessWidget {
   var _formKey = GlobalKey<FormState>();
   var isLoading = false;
-
-  void _submit() {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-  }
+  late MyProvider provider;
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<MyProvider>(context);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -32,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                   Text(
                     "Log in",
                     style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                   ), //styling
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.1,
@@ -89,6 +85,7 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                       FirebaseManager.login(
                           emailController.text, passwordController.text, () {
+                        provider.initUser();
                         Navigator.pushNamedAndRemoveUntil(
                             context, HomeLayout.routeName, (route) => false);
                       }, (message) {
@@ -96,16 +93,16 @@ class LoginScreen extends StatelessWidget {
                             context: context,
                             barrierDismissible: false,
                             builder: (context) => AlertDialog(
-                                  title: Text("Error"),
-                                  content: Text(message),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Ok"))
-                                  ],
-                                ));
+                              title: Text("Error"),
+                              content: Text(message),
+                              actions: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Ok"))
+                              ],
+                            ));
                       });
                     },
                   )

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do_app/layout/home_layout.dart';
 
 import '../../models/tasks_model.dart';
@@ -29,25 +28,41 @@ class _EditTaskState extends State<EditTask> {
     task = ModalRoute.of(context)?.settings.arguments as TasksModel;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Task"),
+        title: Text(
+          "Edit Task",
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.black, fontSize: 22),
+        ),
       ),
       body: Column(
         children: [
           Text("Edit Task",
-              style: TextStyle(
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: AppColors.black, fontSize: 22)
+              /*TextStyle(
                   fontFamily: GoogleFonts.poppins().fontFamily,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primaryColor)),
+                  color: AppColors.primaryColor)*/
+              ),
           TextField(
             controller: titleEditController,
             decoration: InputDecoration(
                 label: Text("Task Title",
-                    style: TextStyle(
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: AppColors.black, fontSize: 22)
+                    /*TextStyle(
                         fontFamily: GoogleFonts.poppins().fontFamily,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor)),
+                        color: AppColors.primaryColor)*/
+                    ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: AppColors.primaryColor)),
@@ -62,11 +77,16 @@ class _EditTaskState extends State<EditTask> {
             controller: descriptionEditController,
             decoration: InputDecoration(
                 label: Text("Task Description",
-                    style: TextStyle(
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: AppColors.black, fontSize: 22)
+                    /*TextStyle(
                         fontFamily: GoogleFonts.poppins().fontFamily,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor)),
+                        color: AppColors.primaryColor)*/
+                    ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: AppColors.primaryColor)),
@@ -109,7 +129,13 @@ class _EditTaskState extends State<EditTask> {
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12))),
-              child: Text("Save Changes")),
+              child: Text(
+                "Save Changes",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: AppColors.black, fontSize: 22),
+              )),
         ],
       ),
     );

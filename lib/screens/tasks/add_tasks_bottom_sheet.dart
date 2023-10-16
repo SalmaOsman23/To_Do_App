@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do_app/models/tasks_model.dart';
 import 'package:to_do_app/shared/network/firebase/firebase_manager.dart';
 import 'package:to_do_app/shared/styles/app_colors.dart';
@@ -39,11 +38,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             controller: titleController,
             decoration: InputDecoration(
                 label: Text("Task Title",
-                    style: TextStyle(
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: AppColors.black, fontSize: 22)
+                    /*TextStyle(
                         fontFamily: GoogleFonts.poppins().fontFamily,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor)),
+                        color: AppColors.primaryColor)*/
+                    ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: AppColors.primaryColor)),
@@ -58,11 +62,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             controller: descriptionController,
             decoration: InputDecoration(
                 label: Text("Task Description",
-                    style: TextStyle(
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: AppColors.black, fontSize: 22)
+                    /*TextStyle(
                         fontFamily: GoogleFonts.poppins().fontFamily,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor)),
+                        color: AppColors.primaryColor)*/
+                    ),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: AppColors.primaryColor)),
@@ -76,7 +85,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Text("Select Date",
               style: Theme.of(context)
                   .textTheme
-                  .bodyLarge!
+                  .bodyMedium!
                   .copyWith(color: AppColors.black, fontSize: 20)),
           SizedBox(
             height: 8,
@@ -110,7 +119,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12))),
-              child: Text("Add Task")),
+              child: Text(
+                "Add Task",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: AppColors.black, fontSize: 22),
+              )),
         ],
       ),
     );

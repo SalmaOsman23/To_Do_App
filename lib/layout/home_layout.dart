@@ -43,7 +43,7 @@ class _HomeLayoutState extends State<HomeLayout> {
         shape: CircularNotchedRectangle(),
         clipBehavior: Clip.hardEdge,
         child: BottomNavigationBar(
-          backgroundColor: AppColors.transparent,
+          //backgroundColor: AppColors.transparent,
           elevation: 0,
           currentIndex: index,
           onTap: (value){

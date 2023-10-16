@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:to_do_app/main.dart';
 import 'package:to_do_app/models/tasks_model.dart';
 import 'package:to_do_app/shared/network/firebase/firebase_manager.dart';
 import 'package:to_do_app/shared/styles/app_colors.dart';
@@ -67,7 +68,9 @@ class _TaskItemState extends State<TaskItem> {
                     height: 80,
                     width: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
+                      color: provider.isDarkMode()
+                          ? AppColors.backgroundDarkColor
+                          : AppColors.primaryColor,
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
@@ -84,7 +87,7 @@ class _TaskItemState extends State<TaskItem> {
                         ),
                         Text(
                           widget.task.description,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodySmall,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                         ),
@@ -108,9 +111,12 @@ class _TaskItemState extends State<TaskItem> {
                       ),
                       child: widget.task.isDone
                           ? Text(
-                              "Done!",
-                              style: TextStyle(
-                                  color: AppColors.white, fontSize: 18),
+                        "Done!",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      color: AppColors.white, fontSize: 18),
                             )
                           : Icon(Icons.done, color: AppColors.white, size: 30),
                     ),
